@@ -21,7 +21,7 @@ public class DealService {
         String dealId = UUID.randomUUID().toString();
         Deal deal = new Deal(dealId, dealName);
         dealRepository.save(deal);
-        eventPublisher.publish(new DealCreated(UUID.randomUUID().toString(), deal));
+        eventPublisher.publish(new DealCreated(UUID.randomUUID().toString(), UUID.randomUUID().toString(), true, deal));
         return dealId;
     }
 
@@ -31,7 +31,7 @@ public class DealService {
         deal.update(dealName);
         dealRepository.save(deal);
         String eventId = UUID.randomUUID().toString();
-        eventPublisher.publish(new DealUpdated(eventId, dealId, dealName, eventId));
+        eventPublisher.publish(new DealUpdated(eventId, eventId, true, dealId, dealName));
     }
 
     @Transactional
@@ -40,7 +40,7 @@ public class DealService {
         deal.updateJurisdiction(implSites);
         dealRepository.save(deal);
         String eventId = UUID.randomUUID().toString();
-        eventPublisher.publish(new DealJurisdictionUpdated(eventId, dealId, implSites, eventId));
+        eventPublisher.publish(new DealJurisdictionUpdated(eventId, eventId, true, dealId, implSites));
     }
 
     @Transactional

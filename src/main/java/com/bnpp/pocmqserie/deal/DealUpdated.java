@@ -1,58 +1,21 @@
 package com.bnpp.pocmqserie.deal;
 
 import com.bnpp.pocmqserie.DomainEvent;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
-public class DealUpdated implements DomainEvent {
-    private String id;
+@Data
+@NoArgsConstructor
+@ToString(callSuper = true)
+public class DealUpdated extends DomainEvent {
     private String dealId;
     private String otherData;
-    private String correlationId;
 
-    public DealUpdated(String id, String dealId, String otherData, String correlationId) {
-        this.id = id;
+    public DealUpdated(String id, String correlationId, boolean ackRequired, String dealId, String otherData) {
+        super(id, correlationId, ackRequired);
         this.dealId = dealId;
         this.otherData = otherData;
-        this.correlationId = correlationId;
-    }
-
-    public String getCorrelationId() {
-        return correlationId;
-    }
-
-    public void setCorrelationId(String correlationId) {
-        this.correlationId = correlationId;
-    }
-
-    public DealUpdated() {
-    }
-
-    public String getDealId() {
-        return dealId;
-    }
-
-    public void setDealId(String dealId) {
-        this.dealId = dealId;
-    }
-
-    public String getOtherData() {
-        return otherData;
-    }
-
-    public void setOtherData(String otherData) {
-        this.otherData = otherData;
-    }
-
-    @Override
-    public String toString() {
-        return "DealUpdated{" +
-                "dealId='" + dealId + '\'' +
-                ", otherData='" + otherData + '\'' +
-                ", correlationId='" + correlationId + '\'' +
-                '}';
-    }
-
-    @Override
-    public String getId() {
-        return id;
     }
 }

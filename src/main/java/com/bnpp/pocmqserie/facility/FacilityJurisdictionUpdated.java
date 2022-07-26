@@ -1,60 +1,22 @@
 package com.bnpp.pocmqserie.facility;
 
 import com.bnpp.pocmqserie.DomainEvent;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.util.List;
 
-public class FacilityJurisdictionUpdated implements DomainEvent {
-    private String id;
+@Data
+@NoArgsConstructor
+@ToString(callSuper = true)
+public class FacilityJurisdictionUpdated extends DomainEvent {
     private String facilityId;
     private List<String> implSites;
-    private String correlationId;
 
-    public FacilityJurisdictionUpdated(String id, String facilityId, List<String> implSites, String correlationId) {
-        this.id = id;
+    public FacilityJurisdictionUpdated(String id, String correlationId, boolean ackRequired, String facilityId, List<String> implSites) {
+        super(id, correlationId, ackRequired);
         this.facilityId = facilityId;
         this.implSites = implSites;
-        this.correlationId = correlationId;
-    }
-
-    public FacilityJurisdictionUpdated() {
-    }
-
-    public String getCorrelationId() {
-        return correlationId;
-    }
-
-    public void setCorrelationId(String correlationId) {
-        this.correlationId = correlationId;
-    }
-
-    public String getFacilityId() {
-        return facilityId;
-    }
-
-    public void setFacilityId(String facilityId) {
-        this.facilityId = facilityId;
-    }
-
-    public List<String> getImplSites() {
-        return implSites;
-    }
-
-    public void setImplSites(List<String> implSites) {
-        this.implSites = implSites;
-    }
-
-    @Override
-    public String toString() {
-        return "FacilityJurisdictionUpdated{" +
-                "facilityId='" + facilityId + '\'' +
-                ", implSites=" + implSites +
-                ", correlationId='" + correlationId + '\'' +
-                '}';
-    }
-
-    @Override
-    public String getId() {
-        return id;
     }
 }

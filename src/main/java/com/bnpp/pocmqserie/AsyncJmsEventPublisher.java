@@ -1,5 +1,6 @@
 package com.bnpp.pocmqserie;
 
+import com.bnpp.pocmqserie.asset.DealUpdatedAck;
 import com.bnpp.pocmqserie.deal.DealJurisdictionUpdated;
 import com.bnpp.pocmqserie.deal.DealUpdated;
 import com.bnpp.pocmqserie.facility.FacilityJurisdictionUpdated;
@@ -30,16 +31,19 @@ public class AsyncJmsEventPublisher {
             emitMessage(activity.getType(), activity.getContent());
             transactionalEventBus.markAsHandled(activity);
         });
-
     }
 
     private void emitMessage(String type, String content) {
+        System.out.println("AsyncJmsEventPublisher.emitMessage");
+        System.out.println("type = " + type + ", content = " + content);
         try {
-            if (type.toLowerCase().contains("facilityjurisdictionupdated")) {
+            if (type.equalsIgnoreCase("facilityjurisdictionupdated")) {
                 jmsTemplate.convertAndSend("facility/jurisdiction/updated/", objectMapper.readValue(content, FacilityJurisdictionUpdated.class));
-            } else if (type.toLowerCase().contains("dealupdated")) {
+            } else if (type.equalsIgnoreCase("dealupdatedack")) {
+                jmsTemplate.convertAndSend("deal/updated/ack/", objectMapper.readValue(content, DealUpdatedAck.class));
+            } else if (type.equalsIgnoreCase("dealupdated")) {
                 jmsTemplate.convertAndSend("deal/updated/", objectMapper.readValue(content, DealUpdated.class));
-            } else if (type.toLowerCase().contains("dealjurisdictionupdated")) {
+            } else if (type.equalsIgnoreCase("dealjurisdictionupdated")) {
                 jmsTemplate.convertAndSend("deal/jurisdiction/updated/", objectMapper.readValue(content, DealJurisdictionUpdated.class));
             } else {
                 System.out.println("Does not know where to send event " + type);

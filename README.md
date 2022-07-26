@@ -79,7 +79,6 @@ curl --location --request PUT 'http://localhost:8080/deals/844d1887-2a3f-4d4f-88
 
 ```java
 @Bean
-@Primary
 public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(ConnectionFactory connectionFactory){
         DefaultJmsListenerContainerFactory factory=new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
@@ -103,7 +102,6 @@ public MessageConverter jacksonJmsMessageConverter(){
         }
 
 @Bean
-@Primary
 public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(ConnectionFactory connectionFactory){
         DefaultJmsListenerContainerFactory factory=new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
@@ -151,7 +149,6 @@ An application subscribing to a topic can create the Subscription either in :
 
 ```java
 @Bean
-@Primary
 public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(ConnectionFactory connectionFactory){
         DefaultJmsListenerContainerFactory factory=new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
@@ -177,74 +174,11 @@ public void onDealJurisdictionUpdated(DealJurisdictionUpdated dealJurisdictionUp
 ```
 
 In the MQ Console, in the "Subscription" panel, you should see a subscription created with a long
-name:  `JMS:QM1:facility-deal-jurisdiction-updated:E2ECC.FACILITY.DEAL.JURISDICTION.UPDATED`
+name:  `JMS:QM1:poc-mqserie:E2ECC.FACILITY.DEAL.JURISDICTION.UPDATED`
 > I still don't know if we can change this or not
 > If you stop listening the subscription, but keeps sending messages, you should see the queue cumulating messages. Once the subscription listens again, all unread messages are received
 
-9. WEIRD: If your application creates multiple Durable Subscription, you need to use different client ID
-    1. Provide 1 `jmsListenerContainerFactory` bean per durable subscription with a different client id each time
-    2. In the `@JmsListener` annotation, provided the attribute `containerFactory="jmsListenerContainerFactory"` to
-       indicate which factory to use to create the subscription Example with 3 durables subscriptions:
-
-```java
-@Bean
-@Primary
-public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(ConnectionFactory connectionFactory){
-        DefaultJmsListenerContainerFactory factory=new DefaultJmsListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
-        factory.setPubSubDomain(true);
-        factory.setMessageConverter(jacksonJmsMessageConverter());
-        factory.setSubscriptionDurable(true);
-        factory.setClientId("asset-deal-updated");
-        return factory;
-        }
-
-@Bean
-public DefaultJmsListenerContainerFactory jmsListenerContainerFactory2(ConnectionFactory connectionFactory){
-        DefaultJmsListenerContainerFactory factory=new DefaultJmsListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
-        factory.setPubSubDomain(true);
-        factory.setMessageConverter(jacksonJmsMessageConverter());
-        factory.setSubscriptionDurable(true);
-        factory.setClientId("facility-deal-jurisdiction-updated");
-        return factory;
-        }
-
-@Bean
-public DefaultJmsListenerContainerFactory jmsListenerContainerFactory3(ConnectionFactory connectionFactory){
-        DefaultJmsListenerContainerFactory factory=new DefaultJmsListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
-        factory.setPubSubDomain(true);
-        factory.setMessageConverter(jacksonJmsMessageConverter());
-        factory.setSubscriptionDurable(true);
-        factory.setClientId("asset-facility-jurisdiction-updated");
-        return factory;
-        }
-```
-
-```java
-@JmsListener(destination = "deal/updated/", subscription = "E2ECC.ASSET.DEAL.UPDATED", containerFactory = "jmsListenerContainerFactory")
-public void onDealUpdated(DealUpdated dealUpdated){
-        System.out.println("AssetSubscribers.onDealUpdated");
-        System.out.println("dealUpdated = "+dealUpdated);
-        }
-
-@JmsListener(destination = "deal/jurisdiction/updated/", subscription = "E2ECC.FACILITY.DEAL.JURISDICTION.UPDATED", containerFactory = "jmsListenerContainerFactory2")
-public void onDealJurisdictionUpdated(DealJurisdictionUpdated dealJurisdictionUpdated){
-        System.out.println("FacilitySubscribers.onDealJurisdictionUpdated");
-        System.out.println("dealJurisdictionUpdated = "+dealJurisdictionUpdated);
-
-        facilityService.updateFacilityJurisdiction(dealJurisdictionUpdated);
-        }
-
-@JmsListener(destination = "facility/jurisdiction/updated/", subscription = "E2ECC.ASSET.FACILITY.JURISDICTION.UPDATED", containerFactory = "jmsListenerContainerFactory3")
-public void onFacilityJurisdictionUpdated(FacilityJurisdictionUpdated facilityJurisdictionUpdated){
-        System.out.println("AssetSubscribers.onFacilityJurisdictionUpdated");
-        System.out.println("facilityJurisdictionUpdated = "+facilityJurisdictionUpdated);
-        }
-```
-
-10. Sharing a subscription. In my understandings, it must be done if your application has many instances (horizontal
+9. Sharing a subscription. In my understandings, it must be done if your application has many instances (horizontal
     scalability). Simple change the `jmsListenerContainerFactory` and add `factory.setSubscriptionShared(true);` :
 
 ```java
@@ -256,7 +190,7 @@ public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(Connection
         factory.setPubSubDomain(true);
         factory.setMessageConverter(jacksonJmsMessageConverter());
         factory.setSubscriptionDurable(true);
-        factory.setClientId("asset-deal-updated");
+        factory.setClientId("poc-mqserie");
         factory.setSubscriptionShared(true);
         return factory;
         }

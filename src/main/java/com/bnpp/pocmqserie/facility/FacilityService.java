@@ -14,7 +14,7 @@ public class FacilityService {
     private EventPublisher eventPublisher;
 
     public void updateFacilityJurisdiction(DealJurisdictionUpdated dealJurisdictionUpdated) {
-        FacilityJurisdictionUpdated facilityJurisdictionUpdated = new FacilityJurisdictionUpdated(UUID.randomUUID().toString(), "FAC-123", dealJurisdictionUpdated.getImplSites(), dealJurisdictionUpdated.getCorrelationId());
+        FacilityJurisdictionUpdated facilityJurisdictionUpdated = new FacilityJurisdictionUpdated(UUID.randomUUID().toString(), dealJurisdictionUpdated.getCorrelationId(), false, "FAC-123", dealJurisdictionUpdated.getImplSites());
         eventPublisher.publish(facilityJurisdictionUpdated);
     }
 }

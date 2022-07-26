@@ -2,7 +2,6 @@ package com.bnpp.pocmqserie;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
@@ -16,41 +15,17 @@ import javax.jms.ConnectionFactory;
 public class JmsConfiguration {
 
     @Bean
-    @Primary
     public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(ConnectionFactory connectionFactory) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         factory.setPubSubDomain(true);
         factory.setSubscriptionDurable(true);
         factory.setSubscriptionShared(true);
-        factory.setClientId("asset-deal-updated");
+        factory.setClientId("poc-mqserie");
         factory.setMessageConverter(jacksonJmsMessageConverter());
         return factory;
     }
 
-    @Bean
-    public DefaultJmsListenerContainerFactory jmsListenerContainerFactory2(ConnectionFactory connectionFactory) {
-        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
-        factory.setPubSubDomain(true);
-        factory.setSubscriptionDurable(true);
-        factory.setSubscriptionShared(true);
-        factory.setClientId("facility-deal-jurisdiction-updated");
-        factory.setMessageConverter(jacksonJmsMessageConverter());
-        return factory;
-    }
-
-    @Bean
-    public DefaultJmsListenerContainerFactory jmsListenerContainerFactory3(ConnectionFactory connectionFactory) {
-        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        factory.setConnectionFactory(connectionFactory);
-        factory.setPubSubDomain(true);
-        factory.setSubscriptionDurable(true);
-        factory.setSubscriptionShared(true);
-        factory.setClientId("asset-facility-jurisdiction-updated");
-        factory.setMessageConverter(jacksonJmsMessageConverter());
-        return factory;
-    }
 //
 //    @Bean
 //    public JmsListenerContainerFactory<?> topicFactory(ConnectionFactory connectionFactory,

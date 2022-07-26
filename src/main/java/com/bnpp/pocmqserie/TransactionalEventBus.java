@@ -24,7 +24,7 @@ public class TransactionalEventBus implements EventPublisher {
     @Override
     public void publish(DomainEvent domainEvent) {
         try {
-            Activity activity = new Activity(UUID.randomUUID().toString(), LocalDateTime.now(), domainEvent.getId(), ActivityDirection.EGRESS, objectMapper.writeValueAsString(domainEvent), domainEvent.getClass().toString());
+            Activity activity = new Activity(UUID.randomUUID().toString(), LocalDateTime.now(), domainEvent.getId(), ActivityDirection.EGRESS, objectMapper.writeValueAsString(domainEvent), domainEvent.getClass().getSimpleName());
             activityRepository.save(activity);
             System.out.println("Activity saved : " + activity);
         } catch (JsonProcessingException e) {

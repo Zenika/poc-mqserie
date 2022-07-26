@@ -1,4 +1,4 @@
-package com.bnpp.pocmqserie.deal;
+package com.bnpp.pocmqserie.asset;
 
 import com.bnpp.pocmqserie.DomainEvent;
 import lombok.Data;
@@ -8,11 +8,9 @@ import lombok.ToString;
 @Data
 @NoArgsConstructor
 @ToString(callSuper = true)
-public class DealCreated extends DomainEvent {
-    private Deal deal;
+public class DealUpdatedAck extends DomainEvent {
 
-    public DealCreated(String id, String correlationId, boolean ackRequired, Deal deal) {
+    public DealUpdatedAck(String id, String correlationId, boolean ackRequired) {
         super(id, correlationId, ackRequired);
-        this.deal = deal;
     }
 }
